@@ -40,8 +40,8 @@ func path_candidates_for_directive(p string, output *array.Of[string]) *array.Of
 			return output
 		}
 
-		output.Push(*array.Map(hits, func(v string, k int, input *array.Of[string]) string {
-			return filepath.Dir(v)
+		output.Push(*array.Map(hits, func(v *string, k int, input *array.Of[string]) string {
+			return filepath.Dir(*v)
 		})...)
 	}
 

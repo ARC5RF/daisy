@@ -60,7 +60,7 @@ func Expand(globs []string) (*array.Of[string], error) {
 		matches = matches.Slice(1, -1)
 	}
 
-	return array.Map(matches, func(v string, k int, input *array.Of[string]) string {
-		return strings.ReplaceAll(v, "//", "/")
+	return array.Map(matches, func(v *string, k int, input *array.Of[string]) string {
+		return strings.ReplaceAll(*v, "//", "/")
 	}), nil
 }

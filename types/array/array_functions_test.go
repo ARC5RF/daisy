@@ -15,8 +15,8 @@ func TestMap(t *testing.T) {
 		*data.At(i) = fmt.Sprint(i)
 	}
 
-	ints := array.Map(data, func(v string, k int, input *array.Of[string]) *int {
-		o, err := strconv.Atoi(v)
+	ints := array.Map(data, func(v *string, k int, input *array.Of[string]) *int {
+		o, err := strconv.Atoi(*v)
 		if err != nil {
 			return nil
 		}
