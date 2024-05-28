@@ -1,18 +1,18 @@
 {
   "version": "0",
   "commands": {
-    "tidy": {
+    "tidy": [{
       "in": "daisy.glob.dir/**/go.mod",
       "do": [
         { "command": "go",  "args": ["mod", "tidy"] }
       ]
-    },
-    "build": {
-      "in": ".",
+    }],
+    "build": [{
+      "in": "./cli",
       "do": [
-        { "command": "go", "args": ["build", "-o", "daisy$DAISY_OS_EXT", "./cli"] },
+        { "command": "go", "args": ["build", "-o", "daisy$DAISY_OS_EXT", "."] },
         { "command": "daisy.move.force", "args": ["daisy$DAISY_OS_EXT", ".build/daisy$DAISY_OS_EXT"] }
       ]
-    }
+    }]
   }
 }

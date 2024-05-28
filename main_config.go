@@ -195,7 +195,18 @@ func (task DaisyTask) Run(wd, pre string, env_overrides *array.Of[string]) error
 	return nil
 }
 
-type DaisyTasks map[string]DaisyTask
+type DaisyTaskList []DaisyTask
+
+func (list DaisyTaskList) Run(wd, pre string, env_overrides *array.Of[string]) error {
+	for _, v := range list {
+		if err := v.Run(wd, pre, env_overrides); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+type DaisyTasks map[string]DaisyTaskList
 
 type DaisyFile struct {
 	Version  string     `json:"version"`
