@@ -8,7 +8,7 @@
       ]
     }],
     "build": [{
-      "in": "./cli",
+      "in": ".",
       "do": [
         { "command": "go", "args": ["build", "-o", "daisy$DAISY_OS_EXT", "."] },
         { "command": "daisy.move.force", "args": ["daisy$DAISY_OS_EXT", ".build/daisy$DAISY_OS_EXT"] }
