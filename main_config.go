@@ -143,8 +143,8 @@ func run_internal_execute(command DaisyCommand, p, location string, env_override
 
 func run_internal_directive(command DaisyCommand, p, location string, env_overrides *array.Of[string]) error {
 	switch command.Command {
-	case "daisy.move.force":
-		return move_force(command, p, location, env_overrides)
+	case "daisy.move.replace":
+		return move_replace(command, p, location, env_overrides)
 	}
 
 	return nil

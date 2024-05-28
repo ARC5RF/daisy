@@ -48,15 +48,21 @@ func path_candidates_for_directive(p string, output *array.Of[string]) *array.Of
 	return output
 }
 
-func move_force(command DaisyCommand, p, location string, _ *array.Of[string]) error {
+func move_replace(command DaisyCommand, p, location string, _ *array.Of[string]) error {
 	if command.Args.Length() < 2 {
 		return errors.New("daisy.move.force expected two arguments")
 	}
 
 	print_with_prefix(p, location, fmt.Sprintln("moving", fmt.Sprint(strings.Join(*command.Args, " to "))), Green, command.Command)
 
+	a := *command.Args.At(0)
+	as, err := os.Stat(a)
+	if err != nil {
+		return err
+	}
+
 	b := *command.Args.At(1)
-	_, err := os.Stat(b)
+	_, err = os.Stat(b)
 
 	d := filepath.Dir(b)
 
@@ -75,9 +81,12 @@ func move_force(command DaisyCommand, p, location string, _ *array.Of[string]) e
 		if err := os.RemoveAll(b); err != nil {
 			return err
 		}
-		os.MkdirAll(d, os.ModePerm)
+		if as.IsDir() {
+			os.MkdirAll(b, os.ModePerm)
+		} else {
+			os.MkdirAll(d, os.ModePerm)
+		}
 	}
 
-	a := *command.Args.At(0)
 	return os.Rename(a, b)
 }
