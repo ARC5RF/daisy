@@ -34,6 +34,20 @@ func only_matches(name, candidate string) []fs.DirEntry {
 
 func Which(name string) []string {
 	output := []string{}
+
+	if strings.HasPrefix(name, ".") {
+		wd, err := os.Getwd()
+		if err != nil {
+			return output
+		}
+		want := filepath.Join(wd, name)
+		if _, err := os.Stat(want); err != nil {
+			return output
+		}
+		output = append(output, want)
+		return output
+	}
+
 	p := os.Getenv("PATH")
 
 	candidates := strings.Split(p, string(os.PathListSeparator))

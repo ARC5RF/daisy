@@ -124,6 +124,15 @@ func run_internal_execute(command DaisyCommand, p, location string, env_override
 	if len(bins) == 0 {
 		return errors.New("could not find " + command.Command)
 	}
+
+	e := ""
+	if env_overrides.Length() > 0 {
+		e = strings.Join(*env_overrides, " ") + " "
+	}
+
+	m := fmt.Sprintln(e+filepath.Base(bins[0]), strings.Join((*command.Args), " "))
+	print_with_prefix(p, location, m, Green, filepath.Base(bins[0]))
+
 	if command.Detached {
 		go Execute(bins[0], p, location, command.Env, env_overrides, command.Args)
 		return nil
@@ -142,10 +151,15 @@ func run_internal_directive(command DaisyCommand, p, location string, env_overri
 }
 
 func run_internal(command DaisyCommand, pre, location string, env_overrides *array.Of[string]) error {
+	p := pre
+	if len(command.Prefix) > 0 {
+		p = command.Prefix
+	}
+
 	if strings.HasPrefix(command.Command, "daisy.") {
 		return run_internal_directive(command, pre, location, env_overrides)
 	}
-	return run_internal_execute(command, pre, location, env_overrides)
+	return run_internal_execute(command, p, location, env_overrides)
 }
 
 func (command DaisyCommand) Run(wd, location, pre string, env_overrides *array.Of[string]) error {
@@ -154,19 +168,7 @@ func (command DaisyCommand) Run(wd, location, pre string, env_overrides *array.O
 		return err
 	}
 
-	e := ""
-	if env_overrides.Length() > 0 {
-		e = strings.Join(*env_overrides, " ") + " "
-	}
-	p := pre
-	if len(command.Prefix) > 0 {
-		p = command.Prefix
-	}
-
-	m := fmt.Sprintln(e+command.Command, strings.Join((*command.Args), " "))
-	print_with_prefix(pre, location, m, Green, command.Command)
-
-	return run_internal(command, p, location, env_overrides)
+	return run_internal(command, pre, location, env_overrides)
 }
 
 type DaisyCommands []DaisyCommand
