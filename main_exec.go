@@ -58,16 +58,18 @@ var Magenta = "\033[35m"
 var l sync.Mutex
 var pp = ""
 var pf = ""
+var pl = ""
 
 func print_with_prefix(prefix, location, message, f, c string) {
 	var current_prefix = prefix
 	l.Lock()
-	if pp != prefix || pf != f {
+	if pp != prefix || pf != f || pl != location {
 		a := fmt.Sprintf("%s%s%s", f, prefix, Reset)
 		b := fmt.Sprintf("%s%s%s", Magenta, location, Reset)
 		current_prefix = fmt.Sprintf("%s %s %s\n", a, c, b)
 		pp = prefix
 		pf = f
+		pl = location
 	} else {
 		current_prefix = ""
 	}
